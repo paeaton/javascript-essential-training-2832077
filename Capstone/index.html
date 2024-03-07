@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Multi-Layer Query</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      h1,
+      h3 {
+        margin-top: 20px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      select,
+      input[type="number"],
+      input[type="text"] {
+        width: calc(100% - 12px);
+        padding: 8px;
+        margin-top: 5px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+      }
+
+      .box {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        margin-top: 10px;
+      }
+
+      .inputGroup {
+        margin-bottom: 15px;
+      }
+
+      .inputGroup label {
+        font-weight: bold;
+      }
+
+      .inputGroup select,
+      .inputGroup input[type="text"] {
+        width: calc(50% - 5px);
+        display: inline-block;
+        vertical-align: top;
+      }
+
+      .inputGroup:last-child {
+        margin-bottom: 0;
+      }
+
+      button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <form id="nameForm">
+        <h1>Ion Selection</h1>
+
+        <div class="inputGroup">
+          <label for="IonType">Ion:</label>
+          <select id="IonType" name="IonType" required>
+            <option value="1">Ion Type 1</option>
+            <option value="2">Ion Type 2</option>
+            <option value="3">Ion Type 3</option>
+          </select>
+        </div>
+
+        <div class="inputGroup">
+          <label for="IonEnergy">Ion Energy:</label>
+          <input type="number" id="IonEnergy" name="IonEnergy" required />
+        </div>
+
+        <h3>Layers</h3>
+
+        <div class="inputGroup">
+          <label for="NumLayer">Number of Layers:</label>
+          <input type="number" id="NumLayer" name="NumLayer" required />
+        </div>
+
+        <div id="layerContainer"></div>
+
+        <div class="inputGroup" id="generateBtn">
+          <button type="button" onclick="generateLayers()">
+            Generate Layers
+          </button>
+        </div>
+
+        <div class="inputGroup" id="submitBtn" style="display: none">
+          <button type="submit">Submit</button>
+        </div>
+
+        <h3 id="layerDataHeading" style="display: none">Layer Data:</h3>
+
+        <div id="layerDataOutput"></div>
+
+        <div class="inputGroup" id="submitBtn">
+          <button
+            type="button"
+            onclick="alert('instead of onclick=whatever, we would include our code about sending to the simulator')"
+          >
+            Submit Request
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <script>
+      var layerData = [];
+
+      var dropdown_materials = [
+        { value: "material1", text: "Material 1" },
+        { value: "material2", text: "Material 2" },
+        // Add more options as needed
+      ];
+
+      function generateLayers() {
+        var numberOfLayers = parseInt(
+          document.getElementById("NumLayer").value
+        );
+        var layerContainer = document.getElementById("layerContainer");
+        layerContainer.innerHTML = "";
+
+        for (var i = 1; i <= numberOfLayers; i++) {
+          var layerDiv = document.createElement("div");
+          layerDiv.className = "box";
+          layerDiv.innerHTML = "<h4>Layer " + i + "</h4>";
+
+          var materialInput = createInput(
+            "select",
+            "materialLayer" + i,
+            "Material",
+            dropdown_materials
+          );
+          var thicknessInput = createInput(
+            "text",
+            "ThicknessLayer" + i,
+            "Thickness"
+          );
+
+          var materialInputGroup = createInputGroup("Material", materialInput);
+          var thicknessInputGroup = createInputGroup(
+            "Thickness",
+            thicknessInput
+          );
+
+          layerDiv.appendChild(materialInputGroup);
+          layerDiv.appendChild(thicknessInputGroup);
+
+          layerContainer.appendChild(layerDiv);
+
+          layerData.push({
+            material: "",
+            thickness: "",
+          });
+
+          materialInput.addEventListener(
+            "input",
+            createInputListener(i - 1, "material")
+          );
+          thicknessInput.addEventListener(
+            "input",
+            createInputListener(i - 1, "thickness")
+          );
+        }
+
+        document.getElementById("generateBtn").style.display = "none";
+        document.getElementById("submitBtn").style.display = "none";
+      }
+
+      function createInput(type, id, placeholder, options) {
+        if (type === "select") {
+          var select = document.createElement("select");
+          select.id = id;
+          select.name = id;
+
+          // Create and append option elements
+          options.forEach(function (option) {
+            var optionElement = document.createElement("option");
+            optionElement.value = option.value;
+            optionElement.textContent = option.text;
+            select.appendChild(optionElement);
+          });
+
+          return select;
+        } else {
+          var input = document.createElement("input");
+          input.type = type;
+          input.id = id;
+          input.name = id;
+          input.placeholder = placeholder;
+          return input;
+        }
+      }
+
+      function createInputListener(index, property) {
+        return function (event) {
+          layerData[index][property] = event.target.value;
+        };
+      }
+
+      function createInputGroup(labelText, inputElement) {
+        var groupDiv = document.createElement("div");
+        groupDiv.className = "inputGroup";
+        var label = document.createElement("label");
+        label.textContent = labelText;
+        groupDiv.appendChild(label);
+        groupDiv.appendChild(inputElement);
+        return groupDiv;
+      }
+
+      document
+        .getElementById("nameForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          var densityInput = document.getElementById("Density");
+          layerData.push({ density: densityInput.value });
+          console.log("Layer Data:", layerData);
+          document.getElementById("layerDataHeading").style.display = "block";
+          var outputDiv = document.getElementById("layerDataOutput");
+          outputDiv.innerHTML =
+            "<pre>" + JSON.stringify(layerData, null, 2) + "</pre>";
+        });
+    </script>
+  </body>
+</html>
