@@ -3,9 +3,9 @@ Basic Functionality for website
 Present on each main HTML page
 */
 
-document.addEventListener("DOMContentLoaded", function() {
-    // Define the navigation bar HTML
-    const navbarHTML = `
+document.addEventListener("DOMContentLoaded", function () {
+  // Define the navigation bar HTML
+  const navbarHTML = `
         <div class="navbar">
             <a href="index.html">Multi-Layer Query</a>
             <a href="single_layer_query.html">Single-Layer Query</a>
@@ -15,23 +15,23 @@ document.addEventListener("DOMContentLoaded", function() {
         </div>
     `;
 
-    // Insert the navigation bar HTML into the document body
-    document.body.insertAdjacentHTML('afterbegin', navbarHTML);
+  // Insert the navigation bar HTML into the document body
+  document.body.insertAdjacentHTML("afterbegin", navbarHTML);
 
-    // Add event listeners to the navigation links
-    const navbarLinks = document.querySelectorAll(".navbar a");
+  // Add event listeners to the navigation links
+  const navbarLinks = document.querySelectorAll(".navbar a");
 
-    navbarLinks.forEach(link => {
-        link.addEventListener("click", function(event) {
-            event.preventDefault();
-            const href = this.getAttribute("href");
-            loadPage(href);
-        });
+  navbarLinks.forEach((link) => {
+    link.addEventListener("click", function (event) {
+      event.preventDefault();
+      const href = this.getAttribute("href");
+      loadPage(href);
     });
+  });
 
-    // Function to load page content
-    function loadPage(url) {
-        // Reload the entire page with the new URL
-        window.location.href = url;
-    }
+  // Function to load page content
+  function loadPage(url) {
+    // Reload the entire page with the new URL
+    window.location.href = url;
+  }
 });
