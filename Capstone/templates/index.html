@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Multi-Layer Query</title>
+    <link rel="stylesheet" href="../static/CSS/styles.css" />
+    <script src="../static/JavaScript/script.js" defer></script>
+    <script src="../static/JavaScript/index.js" defer></script>
+  </head>
+
+  <body>
+    <div class="container">
+      <form id="nameForm">
+        <h1>Multi-Layer Query</h1>
+
+        <h2>Ion Selection</h2>
+        <div class="inputGroup">
+          <label for="IonType">Ion:</label>
+          <select id="IonType" name="IonType" required>
+            <option value="">Select Ion Type</option>
+            <option value="He">Helium</option>
+            <option value="H">Hydrogen</option>
+            <option value="Fe">Iron</option>
+          </select>
+        </div>
+
+        <div class="inputGroup">
+          <label for="IonEnergy">Ion Energy:</label>
+          <input type="number" id="IonEnergy" name="IonEnergy" required />
+        </div>
+
+        <h2>Layers</h2>
+
+        <div id="layerContainer"></div>
+
+        <div class="inputGroup" id="addBtn">
+          <button type="button" onclick="addLayer()">Add Layer</button>
+        </div>
+
+        <h3 id="layerDataHeading" style="display: none">Layer Data:</h3>
+
+        <div id="layerDataOutput"></div>
+
+        <div class="inputGroup" id="printBtn">
+          <button type="button" onclick="printLayerData()">Print Data</button>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
